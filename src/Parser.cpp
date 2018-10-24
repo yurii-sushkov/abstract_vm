@@ -33,8 +33,10 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
+			if (push.substr(10, push.length() - 11).length() > 4)
+				throw (Factory::OutOfRange());
 			long long int buff = std::stol(push.substr(10, push.length() - 11));
-			if (buff <= -128 || buff >= 127 || push.substr(10, push.length() - 11).length() > 10)
+			if (buff <= -128 || buff >= 127)
 				throw (Factory::OutOfRange());
 			ms.push(this->_f.createOperand(Int8, push.substr(10, push.length() - 11)));
 		}
@@ -63,8 +65,10 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
+			if (push.substr(11, push.length() - 12).length() > 6)
+				throw (Factory::OutOfRange());
 			long long int buff = std::stol(push.substr(11, push.length() - 12));
-			if (buff <= -32768 || buff >= 32767 || push.substr(11, push.length() - 12).length() > 10)
+			if (buff <= -32768 || buff >= 32767)
 				throw (Factory::OutOfRange());
 			ms.push(this->_f.createOperand(Int16, push.substr(11, push.length() - 12)));
 		}
@@ -93,9 +97,15 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
-			long long int buff = std::stol(push.substr(11, push.length() - 12));
-			if (buff <= -2147483648 || buff >= 2147483647 || push.substr(11, push.length() - 12).length() > 11)
+			if (push[11] == '-' && push.substr(11, push.length() - 12).length() > 11)
 				throw (Factory::OutOfRange());
+			else if (push[11] != '-' && push.substr(11, push.length() - 12).length() > 10)
+				throw (Factory::OutOfRange());
+			if (std::numeric_limits<int>::max() < std::stoll(push.substr(11, push.length() - 12)))
+				throw (Factory::OutOfRange());
+			//long long int buff = std::stol(push.substr(11, push.length() - 12));
+			//if (buff <= -2147483648 || buff >= 2147483647)
+			//	throw (Factory::OutOfRange());
 			ms.push(this->_f.createOperand(Int32, push.substr(11, push.length() - 12)));
 		}
 		catch (std::exception &e)
@@ -128,8 +138,10 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 					throw (Factory::InvalidInput());
+			if (push.substr(11, push.length() - 12).length() > 7)
+				throw (Factory::OutOfRange());
 			long double buff = std::stod(push.substr(11, push.length() - 12));
-			if (buff <= 1.2E-38 || buff >= 3.4E+38 || push.substr(11, push.length() - 12).length() > 7)
+			if (buff <= 1.2E-38 || buff >= 3.4E+38)
 				throw (Factory::OutOfRange());
 			ms.push(this->_f.createOperand(Float, push.substr(11, push.length() - 12)));
 		}
@@ -163,8 +175,10 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 					throw (Factory::InvalidInput());
+			if (push.substr(12, push.length() - 13).length() > 15)
+				throw (Factory::OutOfRange());
 			long double buff = std::stod(push.substr(12, push.length() - 13));
-			if (buff <= 2.3E-308 || buff >= 1.7E+308 || push.substr(12, push.length() - 13).length() > 15)
+			if (buff <= 2.3E-308 || buff >= 1.7E+308)
 				throw (Factory::OutOfRange());
 			ms.push(this->_f.createOperand(Double, push.substr(12, push.length() - 13)));
 		}
