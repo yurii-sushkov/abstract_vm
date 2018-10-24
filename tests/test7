@@ -1,0 +1,25 @@
+push int8(63) ;?
+
+push int8(116) ;t
+
+push int8(105) ;i
+
+push int8(120) ;x
+
+push int8(101) ;e
+
+print
+pop
+
+print
+pop
+
+print
+pop
+
+print
+pop
+
+print
+pop
+exit
