@@ -25,24 +25,25 @@
 # include <string>
 # include <limits>
 
-template<class T> class Operand : public IOperand {
+template<class T> class Operand : public IOperand
+{
 protected:
 	std::string _value;
 public:
-	Operand( void );
-	Operand( T value );
-	Operand( std::string str );
-	Operand( Operand const & obj );
-	~Operand( void );
-	Operand & operator=( Operand const & rhs );
-	int getPrecision( void ) const;
-	eOperandType getType( void ) const;
-	IOperand const * operator+( IOperand const & rhs ) const;
-	IOperand const * operator-( IOperand const & rhs ) const;
-	IOperand const * operator*( IOperand const & rhs ) const;
-	IOperand const * operator/( IOperand const & rhs ) const;
-	IOperand const * operator%( IOperand const & rhs ) const;
-	std::string const & toString( void ) const;
+	Operand(void);
+	Operand(T value);
+	Operand(std::string str);
+	Operand(Operand const & obj);
+	~Operand(void);
+	Operand & operator=(Operand const & rhs);
+	int getPrecision(void) const;
+	eOperandType getType(void) const;
+	IOperand const * operator+(IOperand const & rhs) const;
+	IOperand const * operator-(IOperand const & rhs) const;
+	IOperand const * operator*(IOperand const & rhs) const;
+	IOperand const * operator/(IOperand const & rhs) const;
+	IOperand const * operator%(IOperand const & rhs) const;
+	std::string const & toString(void) const;
 
 	class DivideByZero : public std::exception
 	{

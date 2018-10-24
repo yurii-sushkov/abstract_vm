@@ -53,29 +53,29 @@ template<class T> Operand<T>::Operand( void )
 	this->_value = std::to_string(static_cast<T>(0));
 }
 
-template<class T> Operand<T>::Operand( Operand<T> const & obj )
+template<class T> Operand<T>::Operand(Operand<T> const & obj)
 {
 	*this = obj;
 }
 
 template<class T> Operand<T>::~Operand( void ){}
 
-template<class T> Operand<T> & Operand<T>::operator=( Operand<T> const & rhs )
+template<class T> Operand<T> & Operand<T>::operator=(Operand<T> const & rhs)
 {
 	this->_value = rhs._value; return *this;
 }
 
-template<class T> Operand<T>::Operand( T value )
+template<class T> Operand<T>::Operand(T value)
 {
 	this->_value = std::to_string(value);
 }
 
-template<class T> Operand<T>::Operand( std::string str )
+template<class T> Operand<T>::Operand(std::string str)
 {
 	this->_value = std::to_string(static_cast<T>(stod(str)));
 }
 
-template<class T> IOperand const * Operand<T>::operator+( IOperand const & rhs ) const
+template<class T> IOperand const * Operand<T>::operator+(IOperand const & rhs) const
 {
 	if (this->getPrecision() < rhs.getPrecision())
 		return (rhs + *this);
@@ -86,12 +86,13 @@ template<class T> IOperand const * Operand<T>::operator+( IOperand const & rhs )
 	else if (add_overflow<T>(lval, rval) == 2)
 		throw (Operand::OverflowException());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(static_cast<T>(stod(this->_value)) + rval));
+	IOperand const * res = factory->createOperand(this->getType(), std::to_string(static_cast<T>(stod(this->_value)) + rval));
 	delete factory;
-	return ret_val;
+	return res;
 }
 
-template<class T> IOperand const * Operand<T>::operator-( IOperand const & rhs ) const {
+template<class T> IOperand const * Operand<T>::operator-(IOperand const & rhs) const
+{
 	if (this->getPrecision() < rhs.getPrecision())
 		return (rhs - *this);
 	T lval = static_cast<T>(stod(this->_value));
@@ -101,14 +102,15 @@ template<class T> IOperand const * Operand<T>::operator-( IOperand const & rhs )
 	if (add_overflow<T>(lval, rval * -1) == 2)
 		throw (Operand::OverflowException());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(lval - rval));
+	IOperand const * res = factory->createOperand(this->getType(), std::to_string(lval - rval));
 	delete factory;
-	return ret_val;
+	return res;
 }
 
-template<class T> IOperand const * Operand<T>::operator*( IOperand const & rhs ) const
+template<class T> IOperand const * Operand<T>::operator*(IOperand const & rhs) const
 {
-	if (this->getPrecision() < rhs.getPrecision()) return (rhs * *this);
+	if (this->getPrecision() < rhs.getPrecision())
+		return (rhs * *this);
 	T lval = static_cast<T>(stod(this->_value));
 	T rval = static_cast<T>(stod(rhs.toString()));
 	if (mul_overflow<T>(lval, rval) == 1)
@@ -116,89 +118,90 @@ template<class T> IOperand const * Operand<T>::operator*( IOperand const & rhs )
 	else if (mul_overflow<T>(lval, rval) == 2)
 		throw (Operand::OverflowException());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(lval * rval));
+	IOperand const * res = factory->createOperand(this->getType(), std::to_string(lval * rval));
 	delete factory;
-	return ret_val;
+	return res;
 }
 
-template<class T> IOperand const * Operand<T>::operator/( IOperand const & rhs ) const
+template<class T> IOperand const * Operand<T>::operator/(IOperand const & rhs) const
 {
 	double lval = stod(this->toString());
 	double rval  = stod(rhs.toString());
 
 	if (rval == 0)
 		throw (Operand::DivideByZero());
-	eOperandType final_type = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
+	eOperandType t = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(final_type, std::to_string(lval / rval));
+	IOperand const * res = factory->createOperand(t, std::to_string(lval / rval));
 	delete factory;
-	return ret_val;
+	return res;
 }
 
-template<class T> IOperand const * Operand<T>::operator%( IOperand const & rhs ) const
+template<class T> IOperand const * Operand<T>::operator%(IOperand const & rhs) const
 {
 	long lval = stol(this->toString());
 	long rval  = stol(rhs.toString());
 
 	if (rval == 0)
 		throw (Operand::DivideByZero());
-	eOperandType final_type = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
+	eOperandType t = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(final_type, std::to_string(lval % rval));
+	IOperand const * res = factory->createOperand(t, std::to_string(lval % rval));
 	delete factory;
-	return ret_val;
+	return res;
 }
 
-template<class T> std::string const & Operand<T>::toString( void ) const {
+template<class T> std::string const & Operand<T>::toString() const
+{
 	return this->_value;
 }
 
-template<> int			Operand<int8_t>::getPrecision( void ) const
+template<> int			Operand<int8_t>::getPrecision() const
 {
 	return Int8;
 }
 
-template<> eOperandType	Operand<int8_t>::getType( void ) const
+template<> eOperandType	Operand<int8_t>::getType() const
 {
 	return Int8;
 }
 
-template<> int			Operand<int16_t>::getPrecision( void ) const
+template<> int			Operand<int16_t>::getPrecision() const
 {
 	return Int16;
 }
 
-template<> eOperandType	Operand<int16_t>::getType( void ) const
+template<> eOperandType	Operand<int16_t>::getType() const
 {
 	return Int16;
 }
 
-template<> int			Operand<int32_t>::getPrecision( void ) const
+template<> int			Operand<int32_t>::getPrecision() const
 {
 	return Int32;
 }
 
-template<> eOperandType	Operand<int32_t>::getType( void ) const
+template<> eOperandType	Operand<int32_t>::getType() const
 {
 	return Int32;
 }
 
-template<> int			Operand<float>::getPrecision( void ) const
+template<> int			Operand<float>::getPrecision() const
 {
 	return Float;
 }
 
-template<> eOperandType	Operand<float>::getType( void ) const
+template<> eOperandType	Operand<float>::getType() const
 {
 	return Float;
 }
 
-template<> int			Operand<double>::getPrecision( void ) const
+template<> int			Operand<double>::getPrecision() const
 {
 	return Double;
 }
 
-template<> eOperandType	Operand<double>::getType( void ) const
+template<> eOperandType	Operand<double>::getType() const
 {
 	return Double;
 }

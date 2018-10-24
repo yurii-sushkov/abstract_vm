@@ -1,3 +1,4 @@
 push double(1)
 dump
 assert int32(1)
+exit
