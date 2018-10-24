@@ -10,28 +10,24 @@
 //                                                                            //
 // ************************************************************************** //
 
-#ifndef OPERAND_T
-# define OPERAND_T
-
+#ifndef OPERAND_HPP
+# define OPERAND_HPP
+/*
 # ifndef OPERAND_T_DEFINED
     #  define OPERAND_T_DEFINED
     template<class T> class Operand;
     #  include "Factory.hpp"
 # endif
-
+*/
+# include "Factory.hpp"
 # include "IOperand.hpp"
-//# include "AbstractVM.hpp"
 # include <exception>
 # include <string>
 # include <limits>
 
-// enum eOperandType {Int8, Int16, Int32, Float, Double};
-
-//****************************
-// CLASS TEMPLATE DECLARATION
-//****************************
-
 template<class T> class Operand : public IOperand {
+protected:
+	std::string _value;
 public:
 	Operand( void );
 	Operand( T value );
@@ -39,14 +35,14 @@ public:
 	Operand( Operand const & obj );
 	~Operand( void );
 	Operand & operator=( Operand const & rhs );
-	int getPrecision( void ) const; // Precision of the type of the instance
-	eOperandType getType( void ) const; // Type of the instance
-	IOperand const * operator+( IOperand const & rhs ) const; // Sum
-	IOperand const * operator-( IOperand const & rhs ) const; // Difference
-	IOperand const * operator*( IOperand const & rhs ) const; // Product
-	IOperand const * operator/( IOperand const & rhs ) const; // Quotient
-	IOperand const * operator%( IOperand const & rhs ) const; // Modulo
-	std::string const & toString( void ) const; // String representation of the instance
+	int getPrecision( void ) const;
+	eOperandType getType( void ) const;
+	IOperand const * operator+( IOperand const & rhs ) const;
+	IOperand const * operator-( IOperand const & rhs ) const;
+	IOperand const * operator*( IOperand const & rhs ) const;
+	IOperand const * operator/( IOperand const & rhs ) const;
+	IOperand const * operator%( IOperand const & rhs ) const;
+	std::string const & toString( void ) const;
 
 	class DivideByZero : public std::exception
 	{
@@ -80,9 +76,6 @@ public:
 			return "ERROR : Overflow Exception.";
 		}
 	};
-
-protected:
-	std::string _value;
 };
 
 #endif

@@ -79,14 +79,14 @@ template<class T> IOperand const * Operand<T>::operator+( IOperand const & rhs )
 {
 	if (this->getPrecision() < rhs.getPrecision())
 		return (rhs + *this);
-	T lhs_value = static_cast<T>(stod(this->_value));
-	T rhs_value = static_cast<T>(stod(rhs.toString()));
-	if (add_overflow<T>(lhs_value, rhs_value) == 1)
+	T lval = static_cast<T>(stod(this->_value));
+	T rval = static_cast<T>(stod(rhs.toString()));
+	if (add_overflow<T>(lval, rval) == 1)
 		throw (Operand::UnderflowException());
-	else if (add_overflow<T>(lhs_value, rhs_value) == 2)
+	else if (add_overflow<T>(lval, rval) == 2)
 		throw (Operand::OverflowException());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(static_cast<T>(stod(this->_value)) + rhs_value));
+	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(static_cast<T>(stod(this->_value)) + rval));
 	delete factory;
 	return ret_val;
 }
@@ -94,14 +94,14 @@ template<class T> IOperand const * Operand<T>::operator+( IOperand const & rhs )
 template<class T> IOperand const * Operand<T>::operator-( IOperand const & rhs ) const {
 	if (this->getPrecision() < rhs.getPrecision())
 		return (rhs - *this);
-	T lhs_value = static_cast<T>(stod(this->_value));
-	T rhs_value = static_cast<T>(stod(rhs.toString()));
-	if (add_overflow<T>(lhs_value, rhs_value * -1) == 1)
+	T lval = static_cast<T>(stod(this->_value));
+	T rval = static_cast<T>(stod(rhs.toString()));
+	if (add_overflow<T>(lval, rval * -1) == 1)
 		throw (Operand::UnderflowException());
-	if (add_overflow<T>(lhs_value, rhs_value * -1) == 2)
+	if (add_overflow<T>(lval, rval * -1) == 2)
 		throw (Operand::OverflowException());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(lhs_value - rhs_value));
+	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(lval - rval));
 	delete factory;
 	return ret_val;
 }
@@ -109,42 +109,42 @@ template<class T> IOperand const * Operand<T>::operator-( IOperand const & rhs )
 template<class T> IOperand const * Operand<T>::operator*( IOperand const & rhs ) const
 {
 	if (this->getPrecision() < rhs.getPrecision()) return (rhs * *this);
-	T lhs_value = static_cast<T>(stod(this->_value));
-	T rhs_value = static_cast<T>(stod(rhs.toString()));
-	if (mul_overflow<T>(lhs_value, rhs_value) == 1)
+	T lval = static_cast<T>(stod(this->_value));
+	T rval = static_cast<T>(stod(rhs.toString()));
+	if (mul_overflow<T>(lval, rval) == 1)
 		throw (Operand::UnderflowException());
-	else if (mul_overflow<T>(lhs_value, rhs_value) == 2)
+	else if (mul_overflow<T>(lval, rval) == 2)
 		throw (Operand::OverflowException());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(lhs_value * rhs_value));
+	IOperand const * ret_val = factory->createOperand(this->getType(), std::to_string(lval * rval));
 	delete factory;
 	return ret_val;
 }
 
 template<class T> IOperand const * Operand<T>::operator/( IOperand const & rhs ) const
 {
-	double lhs_value = stod(this->toString());
-	double rhs_value  = stod(rhs.toString());
+	double lval = stod(this->toString());
+	double rval  = stod(rhs.toString());
 
-	if (rhs_value == 0)
+	if (rval == 0)
 		throw (Operand::DivideByZero());
 	eOperandType final_type = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(final_type, std::to_string(lhs_value / rhs_value));
+	IOperand const * ret_val = factory->createOperand(final_type, std::to_string(lval / rval));
 	delete factory;
 	return ret_val;
 }
 
 template<class T> IOperand const * Operand<T>::operator%( IOperand const & rhs ) const
 {
-	long lhs_value = stol(this->toString());
-	long rhs_value  = stol(rhs.toString());
+	long lval = stol(this->toString());
+	long rval  = stol(rhs.toString());
 
-	if (rhs_value == 0)
+	if (rval == 0)
 		throw (Operand::DivideByZero());
 	eOperandType final_type = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
 	Factory * factory = new Factory();
-	IOperand const * ret_val = factory->createOperand(final_type, std::to_string(lhs_value % rhs_value));
+	IOperand const * ret_val = factory->createOperand(final_type, std::to_string(lval % rval));
 	delete factory;
 	return ret_val;
 }
