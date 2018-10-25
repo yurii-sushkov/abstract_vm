@@ -1,4 +1,6 @@
-push double(1)
+push float(-214.0)
 dump
-assert int32(1)
+assert float(-214.0)
+push int32(33)
+dump
 exit

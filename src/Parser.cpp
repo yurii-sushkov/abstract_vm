@@ -14,7 +14,7 @@
 
 void	Parser::push(std::string push)
 {
-	if (push.substr(5, 5).compare("int8(") == 0)
+	if (push.substr(5, 5).compare("int8(") == 0) //push int8
 	{
 		int c = 0;
 		int j = 10;
@@ -36,17 +36,18 @@ void	Parser::push(std::string push)
 			if (push.substr(10, push.length() - 11).length() > 4)
 				throw (Factory::OutOfRange());
 			long long int buff = std::stol(push.substr(10, push.length() - 11));
-			if (buff <= -128 || buff >= 127)
+			if (buff < -128 || buff > 127)
 				throw (Factory::OutOfRange());
 			ms.push(this->_f.createOperand(Int8, push.substr(10, push.length() - 11)));
 		}
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
-	else if (push.substr(5, 6) == "int16(")
+	else if (push.substr(5, 6) == "int16(") //push int16
 	{
 		int c = 0;
 		int j = 11;
@@ -68,17 +69,18 @@ void	Parser::push(std::string push)
 			if (push.substr(11, push.length() - 12).length() > 6)
 				throw (Factory::OutOfRange());
 			long long int buff = std::stol(push.substr(11, push.length() - 12));
-			if (buff <= -32768 || buff >= 32767)
+			if (buff < -32768 || buff > 32767)
 				throw (Factory::OutOfRange());
 			ms.push(this->_f.createOperand(Int16, push.substr(11, push.length() - 12)));
 		}
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
-	else if (push.substr(5, 6) == "int32(")
+	else if (push.substr(5, 6) == "int32(") //push int32
 	{
 		int c = 0;
 		int j = 11;
@@ -103,6 +105,8 @@ void	Parser::push(std::string push)
 				throw (Factory::OutOfRange());
 			if (std::numeric_limits<int>::max() < std::stoll(push.substr(11, push.length() - 12)))
 				throw (Factory::OutOfRange());
+			if (std::numeric_limits<int>::min() > std::stoll(push.substr(11, push.length() - 12)))
+				throw (Factory::OutOfRange());
 			//long long int buff = std::stol(push.substr(11, push.length() - 12));
 			//if (buff <= -2147483648 || buff >= 2147483647)
 			//	throw (Factory::OutOfRange());
@@ -111,10 +115,11 @@ void	Parser::push(std::string push)
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
-	else if (push.substr(5, 6) == "float(")
+	else if (push.substr(5, 6) == "float(") //push float
 	{
 		int c = 0;
 		int j = 11;
@@ -123,12 +128,12 @@ void	Parser::push(std::string push)
 		{
 			while (push[j] != ')' && push[j] != 0)
 			{
-				if (c == 0 && (!(push[j] >= '0' && push[j] <= '9') || push[j] == '-'))
+				if (c == 0 && (!((push[j] >= '0' && push[j] <= '9') || push[j] == '-')))
 				{
 					throw (Factory::InvalidArgument());
 					break ;
 				}
-				if (!((push[j] >= '0' && push[j] <= '9') || push[j] == '.'))
+				else if (c > 0 && (!((push[j] >= '0' && push[j] <= '9') || push[j] == '.')))
 				{
 					throw (Factory::InvalidArgument());
 					break ;
@@ -138,20 +143,24 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 					throw (Factory::InvalidInput());
-			if (push.substr(11, push.length() - 12).length() > 7)
+			//if (push.substr(11, push.length() - 12).length() > 7)
+			//	throw (Factory::OutOfRange());
+			//long double buff = std::stod(push.substr(11, push.length() - 12));
+			//if (buff <= 1.2E-38 || buff >= 3.4E+38)
+			if (std::stod(push.substr(11, push.length() - 12)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
-			long double buff = std::stod(push.substr(11, push.length() - 12));
-			if (buff <= 1.2E-38 || buff >= 3.4E+38)
+			if (std::stod(push.substr(11, push.length() - 12)) < std::numeric_limits<float>::lowest())
 				throw (Factory::OutOfRange());
 			ms.push(this->_f.createOperand(Float, push.substr(11, push.length() - 12)));
 		}
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
-	else if (push.substr(5, 7) == "double(")
+	else if (push.substr(5, 7) == "double(") //push float
 	{
 		int c = 0;
 		int j = 12;
@@ -185,6 +194,7 @@ void	Parser::push(std::string push)
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
@@ -200,6 +210,7 @@ void	Parser::add()
 	catch (std::exception &e)
 	{
 		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 	const IOperand *t1 = ms.top();
@@ -227,6 +238,7 @@ void	Parser::sub()
 	catch (std::exception &e)
 	{
 		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 	const IOperand *t1 = ms.top();
@@ -254,6 +266,7 @@ void	Parser::mul()
 	catch (std::exception &e)
 	{
 		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 	const IOperand *t1 = ms.top();
@@ -281,6 +294,7 @@ void	Parser::div()
 	catch (std::exception &e)
 	{
 		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 	const IOperand *t1 = ms.top();
@@ -308,6 +322,7 @@ void	Parser::mod()
 	catch (std::exception &e)
 	{
 		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 	const IOperand *t1 = ms.top();
@@ -327,6 +342,18 @@ void	Parser::mod()
 
 void	Parser::top()
 {
+	try
+	{
+		if (ms.size() == 0)
+			throw (Factory::StackException());
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		this->_error = true;
+		return ;
+	}
+
 	std::cout << this->ms.top() << std::endl;
 }
 
@@ -343,7 +370,7 @@ void	Parser::dump()
 
 void	Parser::assert(std::string assert)
 {
-	if (assert.substr(7, 5).compare("int8(") == 0)
+	if (assert.substr(7, 5).compare("int8(") == 0) //assert int8
 	{
 		int c = 0;
 		int j = 12;
@@ -363,8 +390,10 @@ void	Parser::assert(std::string assert)
 			}
 			if (assert[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
+			if (assert.substr(12, assert.length() - 13).length() > 4)
+				throw (Factory::OutOfRange());
 			long long int buff = std::stol(assert.substr(12, assert.length() - 13));
-			if (buff <= -128 || buff >= 127 || assert.substr(12, assert.length() - 13).length() > 4)
+			if (buff < -128 || buff > 127)
 				throw (Factory::OutOfRange());
 			tmp = this->_f.createOperand(Int8, assert.substr(12, assert.length() - 13));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
@@ -373,10 +402,11 @@ void	Parser::assert(std::string assert)
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
-	else if (assert.substr(7, 6) == "int16(")
+	else if (assert.substr(7, 6) == "int16(") //assert int16
 	{
 		int c = 0;
 		int j = 13;
@@ -396,8 +426,10 @@ void	Parser::assert(std::string assert)
 			}
 			if (assert[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
+			if (assert.substr(13, assert.length() - 14).length() > 6)
+				throw (Factory::OutOfRange());
 			long long int buff = std::stol(assert.substr(13, assert.length() - 14));
-			if (buff <= -32768 || buff >= 32767 || assert.substr(13, assert.length() - 14).length() > 7)
+			if (buff < -32768 || buff > 32767)
 				throw (Factory::OutOfRange());
 			tmp = this->_f.createOperand(Int16, assert.substr(13, assert.length() - 14));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
@@ -406,10 +438,11 @@ void	Parser::assert(std::string assert)
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
-	else if (assert.substr(7, 6) == "int32(")
+	else if (assert.substr(7, 6) == "int32(") //assert int32
 	{
 		int c = 0;
 		int j = 13;
@@ -429,8 +462,13 @@ void	Parser::assert(std::string assert)
 			}
 			if (assert[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
-			long long int buff = std::stol(assert.substr(13, assert.length() - 14));
-			if (buff <= -2147483648 || buff >= 2147483647 || assert.substr(13, assert.length() - 14).length() > 10)
+			if (assert[13] == '-' && assert.substr(13, assert.length() - 14).length() > 11)
+				throw (Factory::OutOfRange());
+			else if(assert[13] != '-' && assert.substr(13, assert.length() - 14).length() > 10)
+				throw (Factory::OutOfRange());
+			//long long int buff = std::stoll(assert.substr(13, assert.length() - 14));
+			//if (buff < -2147483648 || buff > 2147483647)
+			if (std::numeric_limits<int>::max() < std::stoll(assert.substr(13, assert.length() - 14)))
 				throw (Factory::OutOfRange());
 			tmp = this->_f.createOperand(Int32, assert.substr(13, assert.length() - 14));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
@@ -439,10 +477,11 @@ void	Parser::assert(std::string assert)
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
-	else if (assert.substr(7, 6) == "float(")
+	else if (assert.substr(7, 6) == "float(") //assert float
 	{
 		int c = 0;
 		int j = 13;
@@ -452,12 +491,12 @@ void	Parser::assert(std::string assert)
 		{
 			while (assert[j] != ')' && assert[j] != 0)
 			{
-				if (c == 0 && (!(assert[j] >= '0' && assert[j] <= '9') || assert[j] == '-'))
+				if (c == 0 && (!((assert[j] >= '0' && assert[j] <= '9') || assert[j] == '-')))
 				{
 					throw (Factory::InvalidArgument());
 					break ;
 				}
-				if (!((assert[j] >= '0' && assert[j] <= '9') || assert[j] == '.'))
+				if (c > 0 && (!((assert[j] >= '0' && assert[j] <= '9') || assert[j] == '.')))
 				{
 					throw (Factory::InvalidArgument());
 					break ;
@@ -467,9 +506,13 @@ void	Parser::assert(std::string assert)
 			}
 			if (assert[j] != ')' || c == 0)
 					throw (Factory::InvalidInput());
-			long double buff = std::stod(assert.substr(13, assert.length() - 14));
-			if (buff <= 1.2E-38 || buff >= 3.4E+38 || assert.substr(13, assert.length() - 14).length() > 9)
+			if (std::stod(assert.substr(13, assert.length() - 14)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
+			if (std::stod(assert.substr(13, assert.length() - 14)) < std::numeric_limits<float>::lowest())
+				throw (Factory::OutOfRange());
+			//long double buff = std::stod(assert.substr(13, assert.length() - 14));
+			//if (buff < 1.2E-38 || buff > 3.4E+38 || assert.substr(13, assert.length() - 14).length() > 9)
+			//	throw (Factory::OutOfRange());
 			tmp = this->_f.createOperand(Float, assert.substr(13, assert.length() - 14));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
 				throw (Factory::AssertException());
@@ -477,10 +520,11 @@ void	Parser::assert(std::string assert)
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
-	else if (assert.substr(7, 7) == "double(")
+	else if (assert.substr(7, 7) == "double(") //assert double
 	{
 		int c = 0;
 		int j = 14;
@@ -506,7 +550,7 @@ void	Parser::assert(std::string assert)
 			if (assert[j] != ')' || c == 0)
 					throw (Factory::InvalidInput());
 			long double buff = std::stod(assert.substr(14, assert.length() - 15));
-			if (buff <= 2.3E-308 || buff >= 1.7E+308 || assert.substr(14, assert.length() - 15).length() > 15)
+			if (buff < 2.3E-308 || buff > 1.7E+308 || assert.substr(14, assert.length() - 15).length() > 15)
 				throw (Factory::OutOfRange());
 			tmp = this->_f.createOperand(Double, assert.substr(14, assert.length() - 15));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
@@ -515,6 +559,7 @@ void	Parser::assert(std::string assert)
 		catch (std::exception &e)
 		{
 			std::cout << "ERROR : " << e.what() << std::endl;
+			this->_error = true;
 			return ;
 		}
 	}
@@ -556,6 +601,7 @@ void	Parser::print()
 	catch (std::exception &e)
 	{
 		std::cout << "ERROR : " << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 }
@@ -573,6 +619,7 @@ Parser::Parser(std::vector<std::string> v)
 {
 	this->_v = v;
 	this->_exit = false;
+	this->_error = false;
 
 	for (this->i = 0; i < _v.size(); i++)
 	{
@@ -591,6 +638,8 @@ Parser::Parser(std::vector<std::string> v)
 	}
 	for (this->i = 0; i < _v.size(); i++)
 	{
+		if (this->_error == true)
+			break ;
 		if (_v[i].compare(0, 5, "push ") == 0)
 			this->push(_v[i]);
 		else if (_v[i].compare(0, 4, "dump") == 0)
@@ -605,6 +654,7 @@ Parser::Parser(std::vector<std::string> v)
 			catch (std::exception &e)
 			{
 				std::cout << "ERROR : line : " << i  + 1 << " : " << e.what() << std::endl;
+				this->_error = true;
 				return ;
 			}
 			this->assert(_v[i]);
@@ -633,6 +683,7 @@ Parser::Parser(std::vector<std::string> v)
 			catch (std::exception &e)
 			{
 				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				this->_error = true;
 				return ;
 			}
 		}

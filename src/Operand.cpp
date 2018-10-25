@@ -72,7 +72,7 @@ template<class T> Operand<T>::Operand(T value)
 
 template<class T> Operand<T>::Operand(std::string str)
 {
-	this->_value = std::to_string(static_cast<T>(stod(str)));
+	this->_value = std::to_string(static_cast<T>(std::stod(str)));
 }
 
 template<class T> IOperand const * Operand<T>::operator+(IOperand const & rhs) const
@@ -86,7 +86,7 @@ template<class T> IOperand const * Operand<T>::operator+(IOperand const & rhs) c
 	else if (add_overflow<T>(lval, rval) == 2)
 		throw (Operand::OverflowException());
 	Factory * factory = new Factory();
-	IOperand const * res = factory->createOperand(this->getType(), std::to_string(static_cast<T>(stod(this->_value)) + rval));
+	IOperand const * res = factory->createOperand(this->getType(), std::to_string(static_cast<T>(std::stod(this->_value)) + rval));
 	delete factory;
 	return res;
 }
@@ -130,7 +130,14 @@ template<class T> IOperand const * Operand<T>::operator/(IOperand const & rhs) c
 
 	if (rval == 0)
 		throw (Operand::DivideByZero());
-	eOperandType t = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
+	
+	eOperandType t;
+
+	if (this->getPrecision() < rhs.getPrecision())
+		t = rhs.getType();
+	else
+		t = this->getType();
+
 	Factory * factory = new Factory();
 	IOperand const * res = factory->createOperand(t, std::to_string(lval / rval));
 	delete factory;
@@ -144,7 +151,14 @@ template<class T> IOperand const * Operand<T>::operator%(IOperand const & rhs) c
 
 	if (rval == 0)
 		throw (Operand::DivideByZero());
-	eOperandType t = (this->getPrecision() < rhs.getPrecision() ? rhs.getType() : this->getType());
+
+	eOperandType t;
+
+	if (this->getPrecision() < rhs.getPrecision())
+		t = rhs.getType();
+	else
+		t = this->getType();
+
 	Factory * factory = new Factory();
 	IOperand const * res = factory->createOperand(t, std::to_string(lval % rval));
 	delete factory;

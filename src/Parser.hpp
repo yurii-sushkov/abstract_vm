@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include <vector>
+# include <limits>
 # include "mutantstack.hpp"
 # include "Factory.hpp"
 
@@ -33,6 +34,7 @@ private:
 	Factory							_f;
 	MutantStack<const IOperand *>	ms;
 	bool							_exit;
+	bool							_error;
 	unsigned long					i;
 public:
 	Parser();
