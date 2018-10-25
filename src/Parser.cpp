@@ -625,6 +625,53 @@ void	Parser::print()
 	}
 }
 
+void	Parser::power()
+{
+	try
+	{
+		if (ms.size() < 2)
+			throw (Factory::NotEnough());
+		const IOperand *t1 = ms.top();
+		ms.pop();
+		const IOperand *t2 = ms.top();
+		ms.pop();
+		const IOperand *tmp = t2;
+		if (t1->getType() == Int8 || t1->getType() == Int16 || t1->getType() == Int32)
+		{
+			int p = 0;
+			int p_max = std::stoi(t1->toString());
+			if (t1->toString()[0] != '-')
+			{
+				//int p = 0;
+				//int p_max = std::stoi(t1->toString());
+				while (p < p_max - 1)
+				{
+					t2 = (*t2 * *tmp);
+					//std::cout << t2->toString() << std::endl;
+					p++;
+				}
+				ms.push(t2);
+			}
+			else
+			{
+				const IOperand *neg = this->_f.createOperand(Double, t2->toString());
+				while (p > p_max - 1)
+				{
+					neg = (*neg / * tmp);
+					p--;
+				}
+				ms.push(neg);
+			}
+		}
+
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		return ;
+	}
+}
+
 void	Parser::exit()
 {
 	this->_exit = true;
@@ -692,6 +739,8 @@ Parser::Parser(std::vector<std::string> v)
 			this->div();
 		else if (_v[i].compare(0, 3, "mod") == 0)
 			this->mod();
+		else if (_v[i].compare(0, 3, "pow") == 0)
+			this->power();
 		else
 		{
 			try

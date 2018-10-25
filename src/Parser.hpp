@@ -56,6 +56,8 @@ public:
 	void	pop();
 	void	print();
 	void	exit();
+
+	void	power();
 };
 
 #endif

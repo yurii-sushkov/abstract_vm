@@ -1,4 +1,5 @@
-push int8(33)
-assert int16(33)
+push int16(2)
+push int8(-4)
+pow
 dump
 exit
