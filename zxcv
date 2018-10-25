@@ -1,5 +1,5 @@
-push int16(2)
-push int8(-4)
+push int32(2)
+push int32(3)
 pow
 dump
 exit

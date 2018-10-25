@@ -145,3 +145,12 @@ char const * Factory::NotEnough::what(void) const throw()
 {
 	return "Not enough elements in stack.";
 }
+
+Factory::CurrentException::CurrentException(){}
+
+Factory::CurrentException::~CurrentException() throw(){}
+
+char const * Factory::CurrentException::what(void) const throw()
+{
+	return "Sorry, currently this option is not allowed. Program is stopped.";
+}

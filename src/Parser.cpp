@@ -640,7 +640,7 @@ void	Parser::power()
 		{
 			int p = 0;
 			int p_max = std::stoi(t1->toString());
-			if (t1->toString()[0] != '-')
+			if (std::stoi(t1->toString()) > 0) //(t1->toString()[0] != '-')
 			{
 				//int p = 0;
 				//int p_max = std::stoi(t1->toString());
@@ -651,6 +651,12 @@ void	Parser::power()
 					p++;
 				}
 				ms.push(t2);
+			}
+			else if (std::stoi(t1->toString()) == 0)
+			{
+				const IOperand *one = this->_f.createOperand(t2->getType(), "1");
+				std::cout << "ASS : " << one->toString() << std::endl;
+				ms.push(one);
 			}
 			else
 			{
@@ -663,7 +669,8 @@ void	Parser::power()
 				ms.push(neg);
 			}
 		}
-
+		else
+			throw (Factory::CurrentException());
 	}
 	catch (std::exception &e)
 	{

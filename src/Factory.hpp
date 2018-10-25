@@ -102,6 +102,15 @@ public:
 		virtual ~NotEnough() throw();
 		char const * what(void) const throw();
 	};
+
+	class CurrentException : public std::exception
+	{
+	public:
+		CurrentException(void);
+		virtual ~CurrentException() throw();
+		char const * what(void) const throw();
+	};
+
 };
 
 #endif
