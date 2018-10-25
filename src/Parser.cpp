@@ -589,7 +589,7 @@ void	Parser::pop()
 	try
 	{
 		if (ms.size() == 0)
-			throw (Factory::StackException());
+			throw (Factory::PopException());
 		else
 			this->ms.pop();
 	}

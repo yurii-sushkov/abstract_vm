@@ -64,3 +64,84 @@ IOperand const * Factory::createOperand( eOperandType type, std::string const & 
 	IOperand const * newOperand = (this->*func[type])(value);
 	return newOperand;
 }
+
+Factory::OutOfRange::OutOfRange(){}
+
+Factory::OutOfRange::~OutOfRange() throw(){}
+
+char const * Factory::OutOfRange::what(void) const throw()
+{
+	return "Impossible value.";
+}
+
+Factory::PopException::PopException(){}
+
+Factory::PopException::~PopException() throw(){}
+
+char const * Factory::PopException::what(void) const throw()
+{
+	return "Cannot pop an empty stack!";
+}
+
+Factory::AssertException::AssertException(){}
+
+Factory::AssertException::~AssertException() throw(){}
+
+char const * Factory::AssertException::what(void) const throw()
+{
+	return "The values are not equal. Program is stopped.";
+}
+
+Factory::StackException::StackException(){}
+
+Factory::StackException::~StackException() throw(){}
+
+char const * Factory::StackException::what(void) const throw()
+{
+	return "stack is empty.";
+}
+
+Factory::PrintException::PrintException(){}
+
+Factory::PrintException::~PrintException() throw(){}
+
+char const * Factory::PrintException::what(void) const throw()
+{
+	return "The top value of the stack is not an 8-bit integer. Program is stopped.";
+}
+
+Factory::ExitException::ExitException(){}
+
+Factory::ExitException::~ExitException() throw(){}
+
+char const * Factory::ExitException::what(void) const throw()
+{
+	return "'exit' command line is not present. Program is stopped.";
+}
+
+Factory::InvalidInput::InvalidInput(){}
+
+Factory::InvalidInput::~InvalidInput() throw(){}
+
+char const * Factory::InvalidInput::what(void) const throw()
+{
+	return "Invalid input.";
+}
+
+Factory::InvalidArgument::InvalidArgument(){}
+
+Factory::InvalidArgument::~InvalidArgument() throw(){}
+
+char const * Factory::InvalidArgument::what(void) const throw()
+{
+	return "Invalid argument.";
+}
+
+Factory::NotEnough::NotEnough(){}
+
+Factory::NotEnough::~NotEnough() throw(){}
+
+char const * Factory::NotEnough::what(void) const throw()
+{
+	return "Not enough elements in stack.";
+}

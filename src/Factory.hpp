@@ -34,100 +34,73 @@ public:
 	class OutOfRange : public std::exception
 	{
 	public:
-		OutOfRange(void){};
-		virtual ~OutOfRange() throw(){};
-		char const * what(void) const throw()
-		{
-			return "Impossible value.";
-		}
+		OutOfRange(void);
+		virtual ~OutOfRange() throw();
+		char const * what(void) const throw();
 	};
 
 	class PopException : public std::exception
 	{
 	public:
-		PopException(void){};
-		virtual ~PopException() throw(){};
-		char const * what(void) const throw()
-		{
-			return "Cannot pop an empty stack!";
-		}
+		PopException(void);
+		virtual ~PopException() throw();
+		char const * what(void) const throw();
 	};
 
 	class AssertException : public std::exception
 	{
 	public:
-		AssertException(void){};
-		virtual ~AssertException() throw(){};
-		char const * what(void) const throw()
-		{
-			return "The values are not equal. Program is stopped.";
-		}
+		AssertException(void);
+		virtual ~AssertException() throw();
+		char const * what(void) const throw();
 	};
 
 	class StackException : public std::exception
 	{
 	public:
-		StackException(void){};
-		virtual ~StackException() throw(){};
-		char const * what(void) const throw()
-		{
-			return "stack is empty.";
-		}
+		StackException(void);
+		virtual ~StackException() throw();
+		char const * what(void) const throw();
 	};	
 
 	class PrintException : public std::exception
 	{
 	public:
-		PrintException(void){};
-		virtual ~PrintException() throw(){};
-		char const * what(void) const throw()
-		{
-			return "The top value of the stack is not an 8-bit integer. Program is stopped.";
-		}
-	};	
+		PrintException(void);
+		virtual ~PrintException() throw();
+		char const * what(void) const throw();
+	};
 
 	class ExitException : public std::exception
 	{
 	public:
-		ExitException(void){};
-		virtual ~ExitException() throw(){};
-		char const * what(void) const throw()
-		{
-			return "'exit' command line is not present. Program is stopped.";
-		}
+		ExitException(void);
+		virtual ~ExitException() throw();
+		char const * what(void) const throw();
 	};
 
 	class InvalidInput : public std::exception
 	{
 	public:
-		InvalidInput(void){};
-		virtual ~InvalidInput() throw(){};
-		char const * what(void) const throw()
-		{
-			return "Invalid input.";
-		}
+		InvalidInput(void);
+		virtual ~InvalidInput() throw();
+		char const * what(void) const throw();
 	};
 
 	class InvalidArgument : public std::exception
 	{
 	public:
-		InvalidArgument(void){};
-		virtual ~InvalidArgument() throw(){};
-		char const * what(void) const throw()
-		{
-			return "Invalid argument.";
-		}
+		InvalidArgument(void);
+		virtual ~InvalidArgument() throw();
+		char const * what(void) const throw();
 	};
 
 	class NotEnough : public std::exception
 	{
 	public:
-		NotEnough(void){};
-		virtual ~NotEnough() throw(){};
-		char const * what(void) const throw()
-		{
-			return "Not enough elements in stack.";
-		}
+		NotEnough(void);
+		virtual ~NotEnough() throw();
+		char const * what(void) const throw();
 	};
 };
 
