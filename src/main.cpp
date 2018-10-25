@@ -893,7 +893,7 @@ void	readconsole(void)
 	std::string		buff_string;
 	std::vector<std::string> queue;
 
-	while (!std::cin.fail())
+	while (!std::cin.fail() && buff_string.find(";;"))
 	{
 		std::getline(std::cin, buff_string);
 		if (buff_string != "" && !containsWhites(buff_string))

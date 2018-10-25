@@ -32,13 +32,19 @@ void	Parser::push(std::string push)
 				j++;
 			}
 			if (push[j] != ')' || c == 0)
+			{
 				throw (Factory::InvalidInput());
-			if (push.substr(10, push.length() - 11).length() > 4)
+			}
+			if (c > 4)//push.substr(10, c).length() > 4) //push.length() - 11).length() > 4)
+			{
 				throw (Factory::OutOfRange());
-			long long int buff = std::stol(push.substr(10, push.length() - 11));
+			}
+			long long int buff = std::stol(push.substr(10, c)); //push.length() - 11));
 			if (buff < -128 || buff > 127)
+			{
 				throw (Factory::OutOfRange());
-			ms.push(this->_f.createOperand(Int8, push.substr(10, push.length() - 11)));
+			}
+			ms.push(this->_f.createOperand(Int8, push.substr(10, c)));//push.length() - 11)));
 		}
 		catch (std::exception &e)
 		{
@@ -66,12 +72,12 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
-			if (push.substr(11, push.length() - 12).length() > 6)
+			if (c > 6)//push.substr(11, c).length() > 6)//push.length() - 12).length() > 6)
 				throw (Factory::OutOfRange());
-			long long int buff = std::stol(push.substr(11, push.length() - 12));
+			long long int buff = std::stol(push.substr(11, c));//push.length() - 12));
 			if (buff < -32768 || buff > 32767)
 				throw (Factory::OutOfRange());
-			ms.push(this->_f.createOperand(Int16, push.substr(11, push.length() - 12)));
+			ms.push(this->_f.createOperand(Int16, push.substr(11, c)));
 		}
 		catch (std::exception &e)
 		{
@@ -99,18 +105,18 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
-			if (push[11] == '-' && push.substr(11, push.length() - 12).length() > 11)
+			if (push[11] == '-' && c > 11) //push.length() - 12).length() > 11)
 				throw (Factory::OutOfRange());
-			else if (push[11] != '-' && push.substr(11, push.length() - 12).length() > 10)
+			else if (push[11] != '-' && c > 10) //push.substr(11, push.length() - 12).length() > 10)
 				throw (Factory::OutOfRange());
-			if (std::numeric_limits<int>::max() < std::stoll(push.substr(11, push.length() - 12)))
+			if (std::numeric_limits<int>::max() < std::stoll(push.substr(11, c)))
 				throw (Factory::OutOfRange());
-			if (std::numeric_limits<int>::min() > std::stoll(push.substr(11, push.length() - 12)))
+			if (std::numeric_limits<int>::min() > std::stoll(push.substr(11, c)))
 				throw (Factory::OutOfRange());
 			//long long int buff = std::stol(push.substr(11, push.length() - 12));
 			//if (buff <= -2147483648 || buff >= 2147483647)
 			//	throw (Factory::OutOfRange());
-			ms.push(this->_f.createOperand(Int32, push.substr(11, push.length() - 12)));
+			ms.push(this->_f.createOperand(Int32, push.substr(11, c)));
 		}
 		catch (std::exception &e)
 		{
@@ -147,11 +153,11 @@ void	Parser::push(std::string push)
 			//	throw (Factory::OutOfRange());
 			//long double buff = std::stod(push.substr(11, push.length() - 12));
 			//if (buff <= 1.2E-38 || buff >= 3.4E+38)
-			if (std::stod(push.substr(11, push.length() - 12)) > std::numeric_limits<float>::max())
+			if (std::stod(push.substr(11, c)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
-			if (std::stod(push.substr(11, push.length() - 12)) < std::numeric_limits<float>::lowest())
+			if (std::stod(push.substr(11, c)) < std::numeric_limits<float>::lowest())
 				throw (Factory::OutOfRange());
-			ms.push(this->_f.createOperand(Float, push.substr(11, push.length() - 12)));
+			ms.push(this->_f.createOperand(Float, push.substr(11, c)));
 		}
 		catch (std::exception &e)
 		{
@@ -184,16 +190,16 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 					throw (Factory::InvalidInput());
-			if (std::stod(push.substr(12, push.length() - 13)) > std::numeric_limits<double>::max())
+			if (std::stod(push.substr(12, c)) > std::numeric_limits<double>::max())
 				throw (Factory::OutOfRange());
-			if (std::stod(push.substr(12, push.length() - 13)) < std::numeric_limits<double>::lowest())
+			if (std::stod(push.substr(12, c)) < std::numeric_limits<double>::lowest())
 				throw (Factory::OutOfRange());
 			/*if (push.substr(12, push.length() - 13).length() > 15)
 				throw (Factory::OutOfRange());
 			long double buff = std::stod(push.substr(12, push.length() - 13));
 			if (buff <= 2.3E-308 || buff >= 1.7E+308)
 				throw (Factory::OutOfRange());*/
-			ms.push(this->_f.createOperand(Double, push.substr(12, push.length() - 13)));
+			ms.push(this->_f.createOperand(Double, push.substr(12, c)));
 		}
 		catch (std::exception &e)
 		{
@@ -228,6 +234,7 @@ void	Parser::add()
 	catch (std::exception &e)
 	{
 		std::cout << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 }
@@ -256,6 +263,7 @@ void	Parser::sub()
 	catch (std::exception &e)
 	{
 		std::cout << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 }
@@ -284,6 +292,7 @@ void	Parser::mul()
 	catch (std::exception &e)
 	{
 		std::cout << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 }
@@ -312,6 +321,7 @@ void	Parser::div()
 	catch (std::exception &e)
 	{
 		std::cout << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 }
@@ -340,6 +350,7 @@ void	Parser::mod()
 	catch (std::exception &e)
 	{
 		std::cout << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 }
@@ -394,12 +405,12 @@ void	Parser::assert(std::string assert)
 			}
 			if (assert[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
-			if (assert.substr(12, assert.length() - 13).length() > 4)
+			if (c > 4)
 				throw (Factory::OutOfRange());
-			long long int buff = std::stol(assert.substr(12, assert.length() - 13));
+			long long int buff = std::stol(assert.substr(12, c));
 			if (buff < -128 || buff > 127)
 				throw (Factory::OutOfRange());
-			tmp = this->_f.createOperand(Int8, assert.substr(12, assert.length() - 13));
+			tmp = this->_f.createOperand(Int8, assert.substr(12, c));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
 				throw (Factory::AssertException());
 		}
@@ -430,12 +441,12 @@ void	Parser::assert(std::string assert)
 			}
 			if (assert[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
-			if (assert.substr(13, assert.length() - 14).length() > 6)
+			if (c > 6)
 				throw (Factory::OutOfRange());
-			long long int buff = std::stol(assert.substr(13, assert.length() - 14));
+			long long int buff = std::stol(assert.substr(13, c));
 			if (buff < -32768 || buff > 32767)
 				throw (Factory::OutOfRange());
-			tmp = this->_f.createOperand(Int16, assert.substr(13, assert.length() - 14));
+			tmp = this->_f.createOperand(Int16, assert.substr(13, c));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
 				throw (Factory::AssertException());
 		}
@@ -466,15 +477,15 @@ void	Parser::assert(std::string assert)
 			}
 			if (assert[j] != ')' || c == 0)
 				throw (Factory::InvalidInput());
-			if (assert[13] == '-' && assert.substr(13, assert.length() - 14).length() > 11)
+			if (assert[13] == '-' && c > 11)
 				throw (Factory::OutOfRange());
-			else if(assert[13] != '-' && assert.substr(13, assert.length() - 14).length() > 10)
+			else if(assert[13] != '-' && c > 10)
 				throw (Factory::OutOfRange());
 			//long long int buff = std::stoll(assert.substr(13, assert.length() - 14));
 			//if (buff < -2147483648 || buff > 2147483647)
-			if (std::numeric_limits<int>::max() < std::stoll(assert.substr(13, assert.length() - 14)))
+			if (std::numeric_limits<int>::max() < std::stoll(assert.substr(13, c)))
 				throw (Factory::OutOfRange());
-			tmp = this->_f.createOperand(Int32, assert.substr(13, assert.length() - 14));
+			tmp = this->_f.createOperand(Int32, assert.substr(13, c));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
 				throw (Factory::AssertException());
 		}
@@ -510,14 +521,14 @@ void	Parser::assert(std::string assert)
 			}
 			if (assert[j] != ')' || c == 0)
 					throw (Factory::InvalidInput());
-			if (std::stod(assert.substr(13, assert.length() - 14)) > std::numeric_limits<float>::max())
+			if (std::stod(assert.substr(13, c)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
-			if (std::stod(assert.substr(13, assert.length() - 14)) < std::numeric_limits<float>::lowest())
+			if (std::stod(assert.substr(13, c)) < std::numeric_limits<float>::lowest())
 				throw (Factory::OutOfRange());
 			//long double buff = std::stod(assert.substr(13, assert.length() - 14));
 			//if (buff < 1.2E-38 || buff > 3.4E+38 || assert.substr(13, assert.length() - 14).length() > 9)
 			//	throw (Factory::OutOfRange());
-			tmp = this->_f.createOperand(Float, assert.substr(13, assert.length() - 14));
+			tmp = this->_f.createOperand(Float, assert.substr(13, c));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
 				throw (Factory::AssertException());
 		}
@@ -556,11 +567,11 @@ void	Parser::assert(std::string assert)
 			//long double buff = std::stod(assert.substr(14, assert.length() - 15));
 			//if (buff < 2.3E-308 || buff > 1.7E+308 || assert.substr(14, assert.length() - 15).length() > 15)
 			//	throw (Factory::OutOfRange());
-			if (std::stod(assert.substr(14, assert.length() - 15)) > std::numeric_limits<double>::max())
+			if (std::stod(assert.substr(14, c)) > std::numeric_limits<double>::max())
 				throw (Factory::OutOfRange());
-			if (std::stod(assert.substr(14, assert.length() - 15)) < std::numeric_limits<double>::lowest())
+			if (std::stod(assert.substr(14, c)) < std::numeric_limits<double>::lowest())
 				throw (Factory::OutOfRange());
-			tmp = this->_f.createOperand(Double, assert.substr(14, assert.length() - 15));
+			tmp = this->_f.createOperand(Double, assert.substr(14, c));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
 				throw (Factory::AssertException());
 		}

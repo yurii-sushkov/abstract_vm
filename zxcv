@@ -1,0 +1,14 @@
+;; test fichier ;;
+push int16(5)
+push int16(3); lil
+
+
+
+;lol
+
+sub
+;exit;
+dump
+;exit
+push 
+add
