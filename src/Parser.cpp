@@ -164,19 +164,19 @@ void	Parser::push(std::string push)
 	{
 		int c = 0;
 		int j = 12;
-		
+		//std::cout << push.substr(12, push.length() - 13) << std::endl;
 		try
 		{
 			while (push[j] != ')' && push[j] != 0)
 			{
-				if (c == 0 && (!(push[j] >= '0' && push[j] <= '9') || push[j] == '-'))
+				if (c == 0 && (!((push[j] >= '0' && push[j] <= '9') || push[j] == '-')))
 				{
 					throw (Factory::InvalidArgument());
 					break ;
 				}
-				if (!((push[j] >= '0' && push[j] <= '9') || push[j] == '.'))
+				if (c > 0 && (!((push[j] >= '0' && push[j] <= '9') || push[j] == '.')))
 				{
-					throw; //(Factory::InvalidArgument());
+					throw (Factory::InvalidArgument());
 					break ;
 				}
 				c++;
@@ -184,11 +184,15 @@ void	Parser::push(std::string push)
 			}
 			if (push[j] != ')' || c == 0)
 					throw (Factory::InvalidInput());
-			if (push.substr(12, push.length() - 13).length() > 15)
+			if (std::stod(push.substr(12, push.length() - 13)) > std::numeric_limits<double>::max())
+				throw (Factory::OutOfRange());
+			if (std::stod(push.substr(12, push.length() - 13)) < std::numeric_limits<double>::lowest())
+				throw (Factory::OutOfRange());
+			/*if (push.substr(12, push.length() - 13).length() > 15)
 				throw (Factory::OutOfRange());
 			long double buff = std::stod(push.substr(12, push.length() - 13));
 			if (buff <= 2.3E-308 || buff >= 1.7E+308)
-				throw (Factory::OutOfRange());
+				throw (Factory::OutOfRange());*/
 			ms.push(this->_f.createOperand(Double, push.substr(12, push.length() - 13)));
 		}
 		catch (std::exception &e)
@@ -534,23 +538,27 @@ void	Parser::assert(std::string assert)
 		{
 			while (assert[j] != ')' && assert[j] != 0)
 			{
-				if (c == 0 && (!(assert[j] >= '0' && assert[j] <= '9') || assert[j] == '-'))
+				if (c == 0 && (!((assert[j] >= '0' && assert[j] <= '9') || assert[j] == '-')))
 				{
 					throw (Factory::InvalidArgument());
 					break ;
 				}
-				if (!((assert[j] >= '0' && assert[j] <= '9') || assert[j] == '.'))
+				if (c > 0 && (!((assert[j] >= '0' && assert[j] <= '9') || assert[j] == '.')))
 				{
-					throw; //(Factory::InvalidArgument());
+					throw (Factory::InvalidArgument());
 					break ;
 				}
 				c++;
 				j++;
 			}
 			if (assert[j] != ')' || c == 0)
-					throw (Factory::InvalidInput());
-			long double buff = std::stod(assert.substr(14, assert.length() - 15));
-			if (buff < 2.3E-308 || buff > 1.7E+308 || assert.substr(14, assert.length() - 15).length() > 15)
+				throw (Factory::InvalidInput());
+			//long double buff = std::stod(assert.substr(14, assert.length() - 15));
+			//if (buff < 2.3E-308 || buff > 1.7E+308 || assert.substr(14, assert.length() - 15).length() > 15)
+			//	throw (Factory::OutOfRange());
+			if (std::stod(assert.substr(14, assert.length() - 15)) > std::numeric_limits<double>::max())
+				throw (Factory::OutOfRange());
+			if (std::stod(assert.substr(14, assert.length() - 15)) < std::numeric_limits<double>::lowest())
 				throw (Factory::OutOfRange());
 			tmp = this->_f.createOperand(Double, assert.substr(14, assert.length() - 15));
 			if (tmp->getType() != ms.top()->getType() || tmp->toString() != ms.top()->toString())
