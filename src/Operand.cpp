@@ -53,9 +53,9 @@ template<class T> Operand<T>::Operand( void )
 	this->_value = std::to_string(static_cast<T>(0));
 }
 
-template<class T> Operand<T>::Operand(Operand<T> const & obj)
+template<class T> Operand<T>::Operand(Operand<T> const & src)
 {
-	*this = obj;
+	*this = src;
 }
 
 template<class T> Operand<T>::~Operand( void ){}

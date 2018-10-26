@@ -757,7 +757,10 @@ Parser::Parser(std::vector<std::string> v)
 	}
 	catch (std::exception &e)
 	{
-		std::cout << "ERROR : " << e.what() << std::endl;
+		if (this->_exit == false)
+			std::cout << "ERROR : " << e.what() << std::endl;
+		else
+			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
 		return ;
 	}
 	for (this->i = 0; i < _v.size(); i++)

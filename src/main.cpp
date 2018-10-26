@@ -25,9 +25,23 @@
 
 void	validation(std::vector<std::string> v)
 {
-	Parser p(v);
+	Parser *p = new Parser(v);
 
-	p.exit();
+	delete p;
+}
+
+bool	containsWhites(std::string buff_string)
+{
+	int i;
+
+	i = 0;
+	while (buff_string[i] && buff_string[i] != ';')
+	{
+		if (buff_string[i] != ' ' && buff_string[i] != '\t')
+			return false;
+		i++;
+	}
+	return true;
 }
 
 void	readfile(std::string s)
@@ -58,21 +72,12 @@ void	readfile(std::string s)
 		queue.push_back(tmp.substr(0, pos));
 		tmp.erase(0, pos + 1);
 	}
-	validation(queue);
-}
-
-bool	containsWhites(std::string buff_string)
-{
-	int i;
-
-	i = 0;
-	while (buff_string[i])
+	for (unsigned long i = 0; i < queue.size(); i++)
 	{
-		if (buff_string[i] != ' ' && buff_string[i] != '\t')
-			return false;
-		i++;
+		if (queue[i] == "" || containsWhites(queue[i]))
+			queue.erase(queue.begin() + i);
 	}
-	return true;
+	validation(queue);
 }
 
 void	readconsole(void)

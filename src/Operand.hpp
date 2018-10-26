@@ -33,7 +33,7 @@ public:
 	Operand(void);
 	Operand(T value);
 	Operand(std::string str);
-	Operand(Operand const & obj);
+	Operand(Operand const & src);
 	~Operand(void);
 	Operand & operator=(Operand const & rhs);
 	int getPrecision(void) const;
