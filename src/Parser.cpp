@@ -6,7 +6,7 @@
 //   By: ysushkov <ysushkov@student.unit.ua>        +#+  +:+       +#+        //
 //                                                +#+#+#+#+#+   +#+           //
 //   Created: 2018/10/24 14:38:01 by ysushkov          #+#    #+#             //
-//   Updated: 2018/10/24 14:38:02 by ysushkov         ###   ########.fr       //
+//   Updated: 2018/10/26 13:44:05 by ysushkov         ###   ########.fr       //
 //                                                                            //
 // ************************************************************************** //
 
@@ -610,9 +610,9 @@ void	Parser::print()
 		{
 			char temp = std::stoi(ms.top()->toString());
 			if (temp >= 32 && temp <= 126)
-				std::cout << "'" << temp << "'." << std::endl;
+				std::cout << "'" << temp << "'" << std::endl;
 			else
-				std::cout << "Not printable." << std::endl;
+				std::cout << "Not printable" << std::endl;
 		}
 		else
 			throw (Factory::PrintException());
