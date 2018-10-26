@@ -16,6 +16,7 @@
 # include <iostream>
 # include <vector>
 # include <limits>
+# include <sstream>
 # include "mutantstack.hpp"
 # include "Factory.hpp"
 
@@ -58,6 +59,7 @@ public:
 	void	exit();
 
 	void	power();
+	void	logarithm();
 };
 
 #endif

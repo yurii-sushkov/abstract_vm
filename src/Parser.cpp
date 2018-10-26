@@ -655,7 +655,7 @@ void	Parser::power()
 			else if (std::stoi(t1->toString()) == 0)
 			{
 				const IOperand *one = this->_f.createOperand(t2->getType(), "1");
-				std::cout << "ASS : " << one->toString() << std::endl;
+				//std::cout << "ASS : " << one->toString() << std::endl;
 				ms.push(one);
 			}
 			else
@@ -675,6 +675,57 @@ void	Parser::power()
 	catch (std::exception &e)
 	{
 		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		this->_error = true;
+		return ;
+	}
+}
+
+void	Parser::logarithm()
+{
+	try
+	{
+		if (ms.size() < 2)
+			throw (Factory::NotEnough());
+		const IOperand *t1 = ms.top();
+		ms.pop();
+		const IOperand *t2 = ms.top();
+		ms.pop();
+		const IOperand *tmp = t1;
+		if ((t1->getType() == Int8 || t1->getType() == Int16 || t1->getType() == Int32) &&
+			(t2->getType() == Int8 || t2->getType() == Int16 || t2->getType() == Int32))
+		{
+			//std::cout << "SUCCESS" << std::endl;
+			int p = std::stoi(t1->toString());
+			int p_max = std::stoi(t2->toString());
+			int log = 0;
+			if (p < 2 || p_max < 2 || p_max < p)
+				throw (Factory::LogarithmException());
+			//std::cout << "T2 : " << t2->toString() << std::endl;
+			//std::cout << "T1 : " << t1->toString() << std::endl;
+			while (std::stoi(t1->toString()) <= p_max)
+			{
+				t1 = (*t1 * *tmp);
+				//std::cout << "T2 : " << t2->toString() << std::endl;
+				log++;
+			}
+			//std::cout << std::stoi(t1->toString()) << " : " << p_max << std::endl;
+			if (std::stoi(t1->toString()) / p == p_max)
+			{
+				std::stringstream ss;
+				ss << log;
+				ms.push(this->_f.createOperand(t1->getType(), ss.str()));
+			}
+			else
+				throw (Factory::LogarithmException());
+			//std::cout << "RES : " << log << std::endl;
+		}
+		else
+			throw (Factory::LogarithmException());
+	}
+	catch (std::exception &e)
+	{
+		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+		this->_error = true;
 		return ;
 	}
 }
@@ -748,6 +799,8 @@ Parser::Parser(std::vector<std::string> v)
 			this->mod();
 		else if (_v[i].compare(0, 3, "pow") == 0)
 			this->power();
+		else if (_v[i].compare(0, 3, "log") == 0)
+			this->logarithm();
 		else
 		{
 			try

@@ -152,5 +152,14 @@ Factory::CurrentException::~CurrentException() throw(){}
 
 char const * Factory::CurrentException::what(void) const throw()
 {
-	return "Sorry, currently this option is not allowed. Program is stopped.";
+	return "Sorry, currently, program works only with integer exponents. Program is stopped.";
+}
+
+Factory::LogarithmException::LogarithmException(){}
+
+Factory::LogarithmException::~LogarithmException() throw(){}
+
+char const * Factory::LogarithmException::what(void) const throw()
+{
+	return "Sorry, program cannot find logarithm with this arguments. Program is stopped.";
 }

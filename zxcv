@@ -1,5 +1,5 @@
+push int32(8)
 push int32(2)
-push int32(3)
-pow
+log
 dump
 exit

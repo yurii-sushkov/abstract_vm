@@ -111,6 +111,14 @@ public:
 		char const * what(void) const throw();
 	};
 
+	class LogarithmException : public std::exception
+	{
+	public:
+		LogarithmException(void);
+		virtual ~LogarithmException() throw();
+		char const * what(void) const throw();
+	};
+
 };
 
 #endif
