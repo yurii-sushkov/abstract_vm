@@ -12,13 +12,7 @@
 
 #ifndef OPERAND_HPP
 # define OPERAND_HPP
-/*
-# ifndef OPERAND_T_DEFINED
-    #  define OPERAND_T_DEFINED
-    template<class T> class Operand;
-    #  include "Factory.hpp"
-# endif
-*/
+
 # include "Factory.hpp"
 # include "IOperand.hpp"
 # include <exception>
@@ -52,7 +46,7 @@ public:
 		virtual ~DivideByZero() throw(){};
 		char const * what(void) const throw()
 		{
-			return "ERROR : Impossible divide by zero.";
+			return "Impossible divide by zero.";
 		}
 	};
 
@@ -63,7 +57,7 @@ public:
 		virtual ~UnderflowException() throw(){};
 		char const * what(void) const throw()
 		{
-			return "ERROR : Underflow Exception.";
+			return "Underflow Exception.";
 		}
 	};
 
@@ -74,7 +68,7 @@ public:
 		virtual ~OverflowException() throw(){};
 		char const * what(void) const throw()
 		{
-			return "ERROR : Overflow Exception.";
+			return "Overflow Exception.";
 		}
 	};
 };
