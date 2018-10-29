@@ -45,6 +45,7 @@ private:
 	void							exit();
 	void							power();
 	void							logarithm();
+	bool							containsWhites(std::string s);
 public:
 	Parser();
 	Parser(std::vector<std::string> v);

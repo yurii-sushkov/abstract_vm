@@ -539,7 +539,7 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false || this->checkFloat(assert.substr(11, c)) == false)
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false || this->checkFloat(assert.substr(13, c)) == false)
 				throw (Factory::InvalidInput());
 			if (std::stod(assert.substr(13, c)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
@@ -579,7 +579,7 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false || this->checkFloat(assert.substr(11, c)) == false)
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false || this->checkFloat(assert.substr(14, c)) == false)
 				throw (Factory::InvalidInput());
 			if (std::stod(assert.substr(14, c)) > std::numeric_limits<double>::max())
 				throw (Factory::OutOfRange());
@@ -591,7 +591,7 @@ void	Parser::assert(std::string assert)
 		}
 		catch (std::exception &e)
 		{
-			std::cout << "ERROR : " << e.what() << std::endl;
+			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
 			this->_error = true;
 			return ;
 		}
@@ -743,6 +743,20 @@ Parser::Parser(){}
 
 Parser::~Parser(){}
 
+bool	Parser::containsWhites(std::string s)
+{
+	int i;
+
+	i = 0;
+	while (s[i] && s[i] != ';')
+	{
+		if (s[i] != ' ' && s[i] != '\t')
+			return false;
+		i++;
+	}
+	return true;
+}
+
 Parser::Parser(std::vector<std::string> v)
 {
 	this->_v = v;
@@ -812,7 +826,7 @@ Parser::Parser(std::vector<std::string> v)
 		{
 			try
 			{
-				if (_v[i] != ";;" && _v[i][0] != ';' && _v[i] != "" && _v[i].compare(0, 4, "exit") != 0)
+				if (_v[i] != ";;" && _v[i][0] != ';' && _v[i] != "" && _v[i].compare(0, 4, "exit") != 0 && !containsWhites(_v[i]))
 					throw (Factory::InvalidInput());
 			}
 			catch (std::exception &e)

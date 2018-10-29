@@ -30,20 +30,6 @@ void	validation(std::vector<std::string> v)
 	delete p;
 }
 
-bool	containsWhites(std::string buff_string)
-{
-	int i;
-
-	i = 0;
-	while (buff_string[i] && buff_string[i] != ';')
-	{
-		if (buff_string[i] != ' ' && buff_string[i] != '\t')
-			return false;
-		i++;
-	}
-	return true;
-}
-
 void	readfile(std::string s)
 {
 	std::ifstream	file;
@@ -72,11 +58,6 @@ void	readfile(std::string s)
 		queue.push_back(tmp.substr(0, pos));
 		tmp.erase(0, pos + 1);
 	}
-	for (unsigned long i = 0; i < queue.size(); i++)
-	{
-		if (queue[i] == "" || containsWhites(queue[i]))
-			queue.erase(queue.begin() + i);
-	}
 	validation(queue);
 }
 
@@ -88,8 +69,7 @@ void	readconsole(void)
 	while (!std::cin.fail() && buff_string.find(";;"))
 	{
 		std::getline(std::cin, buff_string);
-		if (buff_string != "" && !containsWhites(buff_string))
-			queue.push_back(buff_string);
+		queue.push_back(buff_string);
 		if (buff_string.find(";;") != std::string::npos)
 			break ;
 	}
