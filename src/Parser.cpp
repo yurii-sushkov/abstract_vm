@@ -15,10 +15,7 @@
 bool	Parser::checkLine(std::string s, int j)
 {
 	if (s.length() == static_cast<unsigned long>(j + 1))
-	{
-		//std::cout << "OK" << std::endl;
 		return true;
-	}
 	if (s.length() > static_cast<unsigned long>(j + 1))
 	{
 		int k = j + 1;
@@ -30,8 +27,29 @@ bool	Parser::checkLine(std::string s, int j)
 			k++;
 		}
 	}
-	//std::cout << s.substr(j, s.length()) << std::endl;
 	return true;
+}
+
+bool	Parser::checkFloat(std::string s)
+{
+	unsigned long int k = 0;
+	unsigned long int c = 0;
+	int points = 0;
+
+	if (s[k] == '-')
+		k++;
+	while (s[k] != '\0')
+	{
+		if ((c == 0 || c == s.length() - 1) && s[k] == '.')
+			return false;
+		if ((c > 0 || c < s.length() - 1) && s[k] == '.')
+			points++;
+		k++;
+		c++;
+	}
+	if (points == 1)
+		return true;
+	return false;
 }
 
 void	Parser::push(std::string push)
@@ -59,9 +77,7 @@ void	Parser::push(std::string push)
 				throw (Factory::OutOfRange());
 			long long int buff = std::stol(push.substr(10, c));
 			if (buff < -128 || buff > 127)
-			{
 				throw (Factory::OutOfRange());
-			}
 			ms.push(this->_f.createOperand(Int8, push.substr(10, c)));
 		}
 		catch (std::exception &e)
@@ -162,7 +178,7 @@ void	Parser::push(std::string push)
 				c++;
 				j++;
 			}
-			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false)
+			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false || this->checkFloat(push.substr(11, c)) == false)
 				throw (Factory::InvalidInput());
 			if (std::stod(push.substr(11, c)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
@@ -199,7 +215,7 @@ void	Parser::push(std::string push)
 				c++;
 				j++;
 			}
-			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false)
+			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false || this->checkFloat(push.substr(11, c)) == false)
 				throw (Factory::InvalidInput());
 			if (std::stod(push.substr(12, c)) > std::numeric_limits<double>::max())
 				throw (Factory::OutOfRange());
@@ -523,7 +539,7 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false)
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false || this->checkFloat(assert.substr(11, c)) == false)
 				throw (Factory::InvalidInput());
 			if (std::stod(assert.substr(13, c)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
@@ -563,7 +579,7 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false)
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false || this->checkFloat(assert.substr(11, c)) == false)
 				throw (Factory::InvalidInput());
 			if (std::stod(assert.substr(14, c)) > std::numeric_limits<double>::max())
 				throw (Factory::OutOfRange());
@@ -809,3 +825,13 @@ Parser::Parser(std::vector<std::string> v)
 	}
 }
 
+Parser::Parser(Parser const &src)
+{
+	static_cast<void>(src);
+}
+
+Parser &Parser::operator=(Parser const &rhs)
+{
+	static_cast<void>(rhs);
+	return *this;
+}

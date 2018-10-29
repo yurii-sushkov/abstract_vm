@@ -1,5 +1,4 @@
-push int8(123)
-push int8(12);
-print
+push float(123.0)
+push int8(16)
 dump
 exit
