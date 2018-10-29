@@ -37,6 +37,7 @@ private:
 	bool							_exit;
 	bool							_error;
 	unsigned long					i;
+	bool							checkLine(std::string s, int j);
 public:
 	Parser();
 	Parser(std::vector<std::string> v);
@@ -57,7 +58,6 @@ public:
 	void	pop();
 	void	print();
 	void	exit();
-
 	void	power();
 	void	logarithm();
 };

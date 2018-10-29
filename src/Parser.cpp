@@ -12,6 +12,28 @@
 
 #include "Parser.hpp"
 
+bool	Parser::checkLine(std::string s, int j)
+{
+	if (s.length() == static_cast<unsigned long>(j + 1))
+	{
+		//std::cout << "OK" << std::endl;
+		return true;
+	}
+	if (s.length() > static_cast<unsigned long>(j + 1))
+	{
+		int k = j + 1;
+
+		while (s[k] != '\0' && s[k] != ';')
+		{
+			if (s[k] != ' ' && s[k] != '\t' && s[k] != ';')
+				return false;
+			k++;
+		}
+	}
+	//std::cout << s.substr(j, s.length()) << std::endl;
+	return true;
+}
+
 void	Parser::push(std::string push)
 {
 	if (push.substr(5, 5).compare("int8(") == 0)
@@ -31,14 +53,10 @@ void	Parser::push(std::string push)
 				c++;
 				j++;
 			}
-			if (push[j] != ')' || c == 0)
-			{
+			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false)
 				throw (Factory::InvalidInput());
-			}
 			if (c > 4)
-			{
 				throw (Factory::OutOfRange());
-			}
 			long long int buff = std::stol(push.substr(10, c));
 			if (buff < -128 || buff > 127)
 			{
@@ -70,7 +88,7 @@ void	Parser::push(std::string push)
 				c++;
 				j++;
 			}
-			if (push[j] != ')' || c == 0)
+			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false)
 				throw (Factory::InvalidInput());
 			if (c > 6)
 				throw (Factory::OutOfRange());
@@ -103,7 +121,7 @@ void	Parser::push(std::string push)
 				c++;
 				j++;
 			}
-			if (push[j] != ')' || c == 0)
+			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false)
 				throw (Factory::InvalidInput());
 			if (push[11] == '-' && c > 11)
 				throw (Factory::OutOfRange());
@@ -144,8 +162,8 @@ void	Parser::push(std::string push)
 				c++;
 				j++;
 			}
-			if (push[j] != ')' || c == 0)
-					throw (Factory::InvalidInput());
+			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false)
+				throw (Factory::InvalidInput());
 			if (std::stod(push.substr(11, c)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
 			if (std::stod(push.substr(11, c)) < std::numeric_limits<float>::lowest())
@@ -181,8 +199,8 @@ void	Parser::push(std::string push)
 				c++;
 				j++;
 			}
-			if (push[j] != ')' || c == 0)
-					throw (Factory::InvalidInput());
+			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false)
+				throw (Factory::InvalidInput());
 			if (std::stod(push.substr(12, c)) > std::numeric_limits<double>::max())
 				throw (Factory::OutOfRange());
 			if (std::stod(push.substr(12, c)) < std::numeric_limits<double>::lowest())
@@ -391,7 +409,7 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0)
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false)
 				throw (Factory::InvalidInput());
 			if (c > 4)
 				throw (Factory::OutOfRange());
@@ -427,7 +445,7 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0)
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false)
 				throw (Factory::InvalidInput());
 			if (c > 6)
 				throw (Factory::OutOfRange());
@@ -463,7 +481,7 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0)
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false)
 				throw (Factory::InvalidInput());
 			if (assert[13] == '-' && c > 11)
 				throw (Factory::OutOfRange());
@@ -505,8 +523,8 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0)
-					throw (Factory::InvalidInput());
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false)
+				throw (Factory::InvalidInput());
 			if (std::stod(assert.substr(13, c)) > std::numeric_limits<float>::max())
 				throw (Factory::OutOfRange());
 			if (std::stod(assert.substr(13, c)) < std::numeric_limits<float>::lowest())
@@ -545,7 +563,7 @@ void	Parser::assert(std::string assert)
 				c++;
 				j++;
 			}
-			if (assert[j] != ')' || c == 0)
+			if (assert[j] != ')' || c == 0 || this->checkLine(assert, j) == false)
 				throw (Factory::InvalidInput());
 			if (std::stod(assert.substr(14, c)) > std::numeric_limits<double>::max())
 				throw (Factory::OutOfRange());
@@ -599,7 +617,7 @@ void	Parser::print()
 	}
 	catch (std::exception &e)
 	{
-		std::cout << "ERROR : " << e.what() << std::endl;
+		std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
 		this->_error = true;
 		return ;
 	}

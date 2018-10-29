@@ -1,0 +1,5 @@
+push int8(123)
+push int8(12);
+print
+dump
+exit
