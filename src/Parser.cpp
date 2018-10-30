@@ -215,7 +215,7 @@ void	Parser::push(std::string push)
 				c++;
 				j++;
 			}
-			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false || this->checkFloat(push.substr(11, c)) == false)
+			if (push[j] != ')' || c == 0 || this->checkLine(push, j) == false || this->checkFloat(push.substr(12, c)) == false)
 				throw (Factory::InvalidInput());
 			if (std::stod(push.substr(12, c)) > std::numeric_limits<double>::max())
 				throw (Factory::OutOfRange());

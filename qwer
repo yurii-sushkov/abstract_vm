@@ -1,6 +1,6 @@
-push double(999999999999999)
+push double(9999999999.0)
 dump
-assert double(999999999999999)
+assert double(9999999999.0)
 push int32(33)
 dump
 exit
