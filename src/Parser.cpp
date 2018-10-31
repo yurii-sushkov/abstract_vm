@@ -765,30 +765,25 @@ Parser::Parser(std::vector<std::string> v)
 
 	for (this->i = 0; i < _v.size(); i++)
 	{
-		if (_v[i].compare(0, 4, "exit") == 0)
-			this->exit();
-	}
-	try
-	{
-		if (this->_exit == false)
-			throw (Factory::ExitException());
-	}
-	catch (std::exception &e)
-	{
-		if (this->_exit == false)
-			std::cout << "ERROR : " << e.what() << std::endl;
-		else
-			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
-		return ;
-	}
-	for (this->i = 0; i < _v.size(); i++)
-	{
-		if (this->_error == true)
+		if (this->_error == true || this->_exit == true)
 			break ;
 		if (_v[i].compare(0, 5, "push ") == 0)
 			this->push(_v[i]);
 		else if (_v[i].compare(0, 4, "dump") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 3) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->dump();
+		}
 		else if (_v[i].compare(0, 7, "assert ") == 0)
 		{
 			try
@@ -805,28 +800,149 @@ Parser::Parser(std::vector<std::string> v)
 			this->assert(_v[i]);
 		}
 		else if (_v[i].compare(0, 5, "print") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 4) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->print();
+		}
 		else if (_v[i].compare(0, 3, "pop") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 2) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->pop();
+		}
 		else if (_v[i].compare(0, 3, "add") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 2) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->add();
+		}
 		else if (_v[i].compare(0, 3, "sub") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 2) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->sub();
+		}
 		else if (_v[i].compare(0, 3, "mul") == 0)
+		{
 			this->mul();
+		}
 		else if (_v[i].compare(0, 3, "div") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 2) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->div();
+		}
 		else if (_v[i].compare(0, 3, "mod") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 2) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->mod();
+		}
 		else if (_v[i].compare(0, 3, "pow") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 2) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->power();
+		}
 		else if (_v[i].compare(0, 3, "log") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 2) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
 			this->logarithm();
+		}
+		else if (_v[i].compare(0, 4, "exit") == 0)
+		{
+			try
+			{
+				if (checkLine(_v[i], 3) == false)
+					throw (Factory::InvalidInput());
+			}
+			catch (std::exception &e)
+			{
+				this->_error = true;
+				std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+				return ;
+			}
+			this->exit();
+		}
 		else
 		{
 			try
 			{
-				if (_v[i] != ";;" && _v[i][0] != ';' && _v[i] != "" && _v[i].compare(0, 4, "exit") != 0 && !containsWhites(_v[i]))
+				if (_v[i] != ";;" && _v[i][0] != ';' && _v[i] != "" && !containsWhites(_v[i]))
 					throw (Factory::InvalidInput());
 			}
 			catch (std::exception &e)
@@ -835,6 +951,20 @@ Parser::Parser(std::vector<std::string> v)
 				this->_error = true;
 				return ;
 			}
+		}
+	}
+	if (this->_error == false)
+	{
+		try
+		{
+			if (this->_exit == false)
+				throw (Factory::ExitException());
+		}
+		catch (std::exception &e)
+		{
+			this->_error = true;
+			std::cout << "ERROR : " << e.what() << std::endl;
+			return ;
 		}
 	}
 }

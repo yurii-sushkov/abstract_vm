@@ -1,6 +1,9 @@
-push double(9999999999.0)
+push int8(65)
 dump
-assert double(9999999999.0)
-push int32(33)
+push double(4.5)
+mul
 dump
+pop
+print
 exit
+;;

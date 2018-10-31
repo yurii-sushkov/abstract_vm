@@ -66,12 +66,10 @@ void	readconsole(void)
 	std::string		buff_string;
 	std::vector<std::string> queue;
 
-	while (!std::cin.fail() && buff_string.find(";;"))
+	while (!std::cin.fail() && buff_string.compare(";;") != 0)
 	{
 		std::getline(std::cin, buff_string);
 		queue.push_back(buff_string);
-		if (buff_string.find(";;") != std::string::npos)
-			break ;
 	}
 	validation(queue);
 }
