@@ -1,4 +1,0 @@
-push float(123.0)
-push int8(16)
-dump
-exit

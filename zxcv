@@ -1,5 +1,0 @@
-push int32(8)
-push int32(2)
-log
-dump
-exit

@@ -1,7 +1,0 @@
-push int16(33) ;123
-dump
-push float(47.24)
-push double(-42.42)
-sub
-dump
-exit
