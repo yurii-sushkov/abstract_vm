@@ -80,5 +80,9 @@ int		main(int argc, char **argv)
 		readfile(argv[1]);
 	else if (argc == 1)
 		readconsole();
+	else
+	{
+		std::cout << "usage:" << std::endl;
+	}
 	return 0;
 }

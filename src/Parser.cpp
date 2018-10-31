@@ -230,6 +230,19 @@ void	Parser::push(std::string push)
 			return ;
 		}
 	}
+	else
+	{
+		try
+		{
+			throw (Factory::InvalidInput());
+		}
+		catch (std::exception (&e))
+		{
+			this->_error = true;
+			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
+			return ;
+		}
+	}
 }
 
 void	Parser::add()
@@ -593,6 +606,19 @@ void	Parser::assert(std::string assert)
 		{
 			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
 			this->_error = true;
+			return ;
+		}
+	}
+	else
+	{
+		try
+		{
+			throw (Factory::InvalidInput());
+		}
+		catch (std::exception &e)
+		{
+			this->_error = true;
+			std::cout << "ERROR : line : " << i + 1 << " : " << e.what() << std::endl;
 			return ;
 		}
 	}
