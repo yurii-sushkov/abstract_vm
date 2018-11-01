@@ -2,7 +2,7 @@
 
 INSTRUCTIONS :
 
-     push VALUE
+push VALUE
      
 | pop
 
